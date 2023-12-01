@@ -8,8 +8,8 @@ import (
 )
 
 func Part1(lines []string) int {
-	reFirst, _ := regexp.Compile(`.*?(\d).*`)
-	reLast, _ := regexp.Compile(`.*(\d).*?`)
+	reFirst, _ := regexp.Compile(`.*?(\d).*`) // lazy first .*, to get first digit
+	reLast, _ := regexp.Compile(`.*(\d).*?`)  // lazy last .*, to get last digit
 	sum := 0
 
 	for _, line := range lines {
@@ -35,8 +35,8 @@ var funny2proper = map[string]string{
 }
 
 func Part2(lines []string) int {
-	reFirst, _ := regexp.Compile(`.*?(one|two|three|four|five|six|seven|eight|nine|\d).*`)
-	reLast, _ := regexp.Compile(`.*(one|two|three|four|five|six|seven|eight|nine|\d).*?`)
+	reFirst, _ := regexp.Compile(`.*?(one|two|three|four|five|six|seven|eight|nine|\d).*`) // lazy first .*
+	reLast, _ := regexp.Compile(`.*(one|two|three|four|five|six|seven|eight|nine|\d).*?`)  // lazy last .*
 	sum := 0
 
 	for _, line := range lines {
