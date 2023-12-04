@@ -30,6 +30,8 @@ func main() {
 
 	// day 4
 	lines := common.GetLinesFromFile("resources/04_scratch.txt", true, true)
-	sum := day04.Part1(lines)
-	fmt.Println("sum:", sum)
+	// sum := day04.Part1(lines)
+	// fmt.Println("sum:", sum)
+	sum := day04.Part2(lines)
+	fmt.Println("sum2:", sum)
 }
