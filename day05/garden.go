@@ -98,8 +98,11 @@ func Part2(lines []string) int {
 	// fmt.Println(allMaps)
 
 	min := math.MaxInt
+	// seedsRanges := NewMapping()
 	for i := 0; i < len(seedsRaw); i += 2 {
 		fmt.Println(seedsRaw[i], seedsRaw[i+1])
+		// seedsRanges.AddRange(*NewRangeMap(seedsRaw[i], 0, seedsRaw[i+1]))
+
 		for j := 0; j < seedsRaw[i+1]; j++ {
 			seed := seedsRaw[i] + j
 			soil := allMaps["seed"]["soil"].Get(seed)
@@ -115,6 +118,10 @@ func Part2(lines []string) int {
 			}
 		}
 	}
+
+	// fmt.Println("seeds len:", len(seedsRanges.rangeMaps))
+	// seedsRanges.NormalizeRanges()
+	// fmt.Println("seeds len (normalized):", len(seedsRanges.rangeMaps))
 
 	return min
 }
