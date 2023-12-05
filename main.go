@@ -2,7 +2,7 @@ package main
 
 import (
 	"aoc2023/common"
-	"aoc2023/day04"
+	"aoc2023/day05"
 	"fmt"
 )
 
@@ -28,10 +28,17 @@ func main() {
 	// sum := day03.Part2(lines)
 	// fmt.Println("sum2:", sum)
 
-	// day 4
-	lines := common.GetLinesFromFile("resources/04_scratch.txt", true, true)
-	// sum := day04.Part1(lines)
-	// fmt.Println("sum:", sum)
-	sum := day04.Part2(lines)
-	fmt.Println("sum2:", sum)
+	// // day 4
+	// lines := common.GetLinesFromFile("resources/04_scratch.txt", true, true)
+	// // sum := day04.Part1(lines)
+	// // fmt.Println("sum:", sum)
+	// sum := day04.Part2(lines)
+	// fmt.Println("sum2:", sum)
+
+	// day 5
+	lines := common.GetLinesFromFile("resources/05_garden.txt", true, true)
+	// min := day05.Part1(lines)
+	// fmt.Println("min:", min)
+	min := day05.Part2(lines)
+	fmt.Println("min:", min)
 }
