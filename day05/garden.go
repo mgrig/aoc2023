@@ -105,8 +105,14 @@ func Part2(lines []string) int {
 	temp2hum := allMaps["temperature"]["humidity"]
 	hum2location := allMaps["humidity"]["location"]
 
+	// The magic is in the Compose function, which takes
+	// y = f(x) and z = g(y) and creates a new interval-based function z = gf(x) = g(f(x))
+	// Apply this repeatedly to get an interval based seed2location function.
 	seed2location := Compose(*seed2soil, Compose(*soil2fert, Compose(*fert2water, Compose(*water2light, Compose(*light2temp, Compose(*temp2hum, *hum2location))))))
 
+	// And then take the given seed ranges and consider them yet another function
+	// (unity, aka f(x) = x), where we are only interested in the computation of
+	// the combined domain ranges.
 	range2seed := NewFn([]int{}, []int{})
 	var dis DomainIntervals = make([]DomainInterval, 0)
 	for i := 0; i < len(seedsRaw); i += 2 {
@@ -116,6 +122,9 @@ func Part2(lines []string) int {
 	}
 	range2location := Compose(*range2seed, seed2location)
 
+	// Each resulting domain range leads to the same(!) location value,
+	// so it's enough to compute the min value once for each interval.
+	// This is where the main time gain comes from.
 	min := math.MaxInt
 	for k, v := range range2location.offsets {
 		if !dis.Contains(k) {
