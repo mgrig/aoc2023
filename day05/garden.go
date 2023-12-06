@@ -67,8 +67,8 @@ func Part2(lines []string) int {
 	reMapHeader := regexp.MustCompile(`(.*?)-to-(.*?) map:`)
 
 	var seedsRaw []int
-	allMaps := make(map[string](map[string]*Mapping))
-	var currentMapping *Mapping = nil
+	allMaps := make(map[string](map[string]*Fn))
+	var currentFn *Fn = nil
 
 	for _, line := range lines {
 		if strings.HasPrefix(line, "seeds:") {
@@ -79,42 +79,60 @@ func Part2(lines []string) int {
 
 		tokens := reMapHeader.FindStringSubmatch(line)
 		if len(tokens) == 3 {
-			currentMapping = NewMapping()
+			currentFn = NewFn([]int{}, []int{})
 
 			destMap, exists := allMaps[tokens[1]]
 			if !exists {
-				allMaps[tokens[1]] = make(map[string]*Mapping)
+				allMaps[tokens[1]] = make(map[string]*Fn)
 				destMap = allMaps[tokens[1]]
 			}
 
-			destMap[tokens[2]] = currentMapping // should not already exist, but not checking atm
+			destMap[tokens[2]] = currentFn // should not already exist, but not checking atm
 		} else {
 			// normal line, add to existing mapping
 			tokens := stringToIntArray(line)
 			// fmt.Println(line, currentMapping)
-			currentMapping.AddRange(*NewRangeMap(tokens[1], tokens[0], tokens[2]))
+			currentFn.AddPointFromRaw(tokens[0], tokens[1], tokens[2])
 		}
 	}
 	// fmt.Println(allMaps)
 
-	min := math.MaxInt
+	seed2soil := allMaps["seed"]["soil"]
+	soil2fert := allMaps["soil"]["fertilizer"]
+	fert2water := allMaps["fertilizer"]["water"]
+	water2light := allMaps["water"]["light"]
+	light2temp := allMaps["light"]["temperature"]
+	temp2hum := allMaps["temperature"]["humidity"]
+	hum2location := allMaps["humidity"]["location"]
+
+	seed2location := Compose(*seed2soil, Compose(*soil2fert, Compose(*fert2water, Compose(*water2light, Compose(*light2temp, Compose(*temp2hum, *hum2location))))))
+
+	range2seed := NewFn([]int{}, []int{})
 	for i := 0; i < len(seedsRaw); i += 2 {
 		fmt.Println(seedsRaw[i], seedsRaw[i+1])
-		for j := 0; j < seedsRaw[i+1]; j++ {
-			seed := seedsRaw[i] + j
-			soil := allMaps["seed"]["soil"].Get(seed)
-			fertilizer := allMaps["soil"]["fertilizer"].Get(soil)
-			water := allMaps["fertilizer"]["water"].Get(fertilizer)
-			light := allMaps["water"]["light"].Get(water)
-			temp := allMaps["light"]["temperature"].Get(light)
-			hum := allMaps["temperature"]["humidity"].Get(temp)
-			location := allMaps["humidity"]["location"].Get(hum)
+		range2seed.AddPointFromRaw(seedsRaw[i], seedsRaw[i], seedsRaw[i+1])
+	}
+	range2location := Compose(*range2seed, seed2location)
 
-			if location < min {
-				min = location
-			}
+	min := math.MaxInt
+	for k, v := range range2location.offsets {
+		location := k + v
+
+		if location == 0 {
+			lower := seed2soil.domainLowerEqual(k)
+			fmt.Println(k, v, lower)
+
+		}
+
+		// if location <= 46522193 {
+		// 	continue // TODO hmm
+		// }
+		if location < min {
+			min = location
 		}
 	}
+
+	// fmt.Println(range2location.offsets)
 
 	return min
 }
