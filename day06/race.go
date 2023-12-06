@@ -49,9 +49,7 @@ func Part2(lines []string) int {
 }
 
 func CountWins(t, d int) int {
-	// (t-p)*p > d
-	// tp - p^2 > d
-	// p^2 - tp + d < 0
+	// (t-p)*p > d  ->  p^2 - tp + d < 0
 
 	// a x^2 + b x + c = 0
 	/*
@@ -74,10 +72,12 @@ func CountWins(t, d int) int {
 	tf := float64(t)
 	df := float64(d)
 
+	// compute square roots ...
 	delta := tf*tf/4 - df
 	sqDelta := math.Sqrt(delta)
 	x0 := tf/2 - sqDelta
 	x1 := tf/2 + sqDelta
+	// ... and round towards the "inner" integers
 	x0Int := int(math.Floor(x0 + 1))
 	x1Int := int(math.Ceil(x1 - 1))
 
@@ -86,12 +86,10 @@ func CountWins(t, d int) int {
 		// no intersection
 		return 0
 	}
-
-	// fmt.Println(x0, x1, x0Int, x1Int)
-
 	min := common.IntMax(x0Int, 1)
 	max := common.IntMin(x1Int, t-1)
 
+	// our answer is the length of the intersection
 	return max - min + 1
 }
 
