@@ -108,14 +108,20 @@ func Part2(lines []string) int {
 	seed2location := Compose(*seed2soil, Compose(*soil2fert, Compose(*fert2water, Compose(*water2light, Compose(*light2temp, Compose(*temp2hum, *hum2location))))))
 
 	range2seed := NewFn([]int{}, []int{})
+	var dis DomainIntervals = make([]DomainInterval, 0)
 	for i := 0; i < len(seedsRaw); i += 2 {
 		fmt.Println(seedsRaw[i], seedsRaw[i+1])
 		range2seed.AddPointFromRaw(seedsRaw[i], seedsRaw[i], seedsRaw[i+1])
+		dis = append(dis, *NewDomainInterval(seedsRaw[i], seedsRaw[i]+seedsRaw[i+1]-1))
 	}
 	range2location := Compose(*range2seed, seed2location)
 
 	min := math.MaxInt
 	for k, v := range range2location.offsets {
+		if !dis.Contains(k) {
+			continue
+		}
+
 		location := k + v
 
 		if location == 0 {
@@ -124,15 +130,10 @@ func Part2(lines []string) int {
 
 		}
 
-		// if location <= 46522193 {
-		// 	continue // TODO hmm
-		// }
 		if location < min {
 			min = location
 		}
 	}
-
-	// fmt.Println(range2location.offsets)
 
 	return min
 }
