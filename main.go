@@ -51,6 +51,8 @@ func main() {
 
 	// day 7
 	lines := common.GetLinesFromFile("resources/07_camel.txt", true, true)
-	part1 := day07.Part1(lines)
-	fmt.Println("part1:", part1)
+	// part1 := day07.Part1(lines)
+	// fmt.Println("part1:", part1)
+	part2 := day07.Part2(lines)
+	fmt.Println("part2:", part2)
 }
