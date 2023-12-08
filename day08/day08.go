@@ -17,7 +17,6 @@ func Part1(lines []string) int {
 		tokens := reNode.FindStringSubmatch(lines[i])
 		g.Add(tokens[1], tokens[2], tokens[3])
 	}
-	// fmt.Println(*g)
 
 	node := "AAA"
 	steps := 0
@@ -37,23 +36,17 @@ func Part1(lines []string) int {
 
 func Part2(lines []string) int {
 	instr := lines[0]
-	// fmt.Println(instr)
 
 	reNode := regexp.MustCompile(`^(.*?) = \((.*?), (.*?)\)`)
 	g := NewGraph()
 	starts := make(map[string]bool) // set
-	// ends := make(map[string]bool)   // set
 	for i := 1; i < len(lines); i++ {
 		tokens := reNode.FindStringSubmatch(lines[i])
 		g.Add(tokens[1], tokens[2], tokens[3])
 		if strings.HasSuffix(tokens[1], "A") {
 			starts[tokens[1]] = true
 		}
-		// else if strings.HasSuffix(tokens[1], "Z") {
-		// 	ends[tokens[1]] = true
-		// }
 	}
-	// fmt.Println(starts, ends)
 
 	// compute the length of each path (from a start to an end) and get LCM for the final result
 	var gcd *big.Int = nil
@@ -82,7 +75,7 @@ func Part2(lines []string) int {
 			lcm = lcm.Mul(lcm, b.Div(b, gcd))
 		}
 	}
-	fmt.Println("gcd:", gcd)
+	// fmt.Println("gcd:", gcd)
 
 	return int(lcm.Int64())
 }
