@@ -2,7 +2,7 @@ package main
 
 import (
 	"aoc2023/common"
-	"aoc2023/day08"
+	"aoc2023/day09"
 	"fmt"
 )
 
@@ -56,10 +56,17 @@ func main() {
 	// part2 := day07.Part2(lines)
 	// fmt.Println("part2:", part2)
 
-	// day 8
-	lines := common.GetLinesFromFile("resources/08_leftright.txt", true, true)
-	// part1 := day08.Part1(lines)
+	// // day 8
+	// lines := common.GetLinesFromFile("resources/08_leftright.txt", true, true)
+	// // part1 := day08.Part1(lines)
+	// // fmt.Println("part1:", part1)
+	// part2 := day08.Part2(lines)
+	// fmt.Println("part2:", part2)
+
+	// day 9
+	lines := common.GetLinesFromFile("resources/09.txt", true, true)
+	// part1 := day09.Part1(lines)
 	// fmt.Println("part1:", part1)
-	part2 := day08.Part2(lines)
+	part2 := day09.Part2(lines)
 	fmt.Println("part2:", part2)
 }
