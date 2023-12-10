@@ -56,6 +56,7 @@ func Part2(lines []string) int {
 	down := NewCoord(start.r+1, start.c)
 	var hist *[]Coord
 
+	// Identify the loop
 	if Advance(g, start, right) != nil {
 		hist = FollowPipe(g, start, right)
 	}
@@ -70,23 +71,26 @@ func Part2(lines []string) int {
 	if hist == nil && Advance(g, start, down) != nil {
 		hist = FollowPipe(g, start, down)
 	}
+
 	// replace S with actual pipe piece
 	first := (*hist)[0]
 	last := (*hist)[len(*hist)-1]
 	rep := computePipe(start, first, last)
-	fmt.Printf("replace start with %c\n", rep)
+	// fmt.Printf("replace start with %c\n", rep)
 	g.grid[start.r][start.c] = rep
-	// ... and add to hist
-	*hist = append(*hist, start)
-	fmt.Println(len(*hist))
 
+	// ... and add the start coord to hist
+	*hist = append(*hist, start)
+	// fmt.Println(len(*hist))
+
+	// create a grid with just the loop ...
 	loopGrid := NewGrid(m, n)
 	for _, h := range *hist {
 		loopGrid.grid[h.r][h.c] = int('*')
 	}
 	// fmt.Println(loopGrid)
 
-	// clear all pipes that are not in the loop
+	// ... so we can clear all pipes that are not in the loop in the main grid (g)
 	for r := range g.grid {
 		for c := range g.grid[r] {
 			if loopGrid.grid[r][c] == 0 {
@@ -96,6 +100,20 @@ func Part2(lines []string) int {
 	}
 	fmt.Println(g)
 
+	// Coord (0, 0) cannot be inside, so we start from it and propagate the outside info
+	// along CORNERS!
+	// A cell of grid g is only INNER if all its 4 corners are inner (aka not marked as OUTSIDE).
+	// Propagating OUTSIDE info on corners, and not cells allows the propagation to "sqeeze"
+	// between neighboring loop cells.
+	/*
+		  |      |
+		--C------C--
+		  |      |
+		  | Cell |
+		  |      |
+		--C------C--
+		  |      |
+	*/
 	corners := NewGrid(m+1, n+1) // 1 will mean outside
 	x := make([]Coord, 0)
 	toPropagate := &x
