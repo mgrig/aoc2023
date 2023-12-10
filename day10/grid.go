@@ -1,6 +1,9 @@
 package day10
 
-import "fmt"
+import (
+	"aoc2023/common"
+	"fmt"
+)
 
 type Coord struct {
 	r, c int
@@ -11,6 +14,31 @@ func NewCoord(r, c int) Coord {
 		r: r,
 		c: c,
 	}
+}
+
+const (
+	UP    int = 1
+	DOWN  int = 2
+	RIGHT int = 3
+	LEFT  int = 4
+)
+
+func (c Coord) relativeTo(other Coord) int {
+	dx := c.c - other.c
+	dy := c.r - other.r
+	if dx*dy != 0 || common.IntAbs(dx-dy) != 1 {
+		panic("wrong relatives")
+	}
+	if dx == 0 {
+		if dy == 1 {
+			return DOWN
+		}
+		return UP
+	}
+	if dx == 1 {
+		return RIGHT
+	}
+	return LEFT
 }
 
 // ****
@@ -35,9 +63,9 @@ type Grid struct {
 	start *Coord
 }
 
-func NewGrid(n int) *Grid {
-	g := make([][]int, n)
-	for r, _ := range g {
+func NewGrid(m, n int) *Grid {
+	g := make([][]int, m)
+	for r := range g {
 		g[r] = make([]int, n)
 	}
 	return &Grid{
@@ -47,8 +75,8 @@ func NewGrid(n int) *Grid {
 }
 
 func (g *Grid) Fill(val int) {
-	for r, _ := range g.grid {
-		for c, _ := range g.grid[r] {
+	for r := range g.grid {
+		for c := range g.grid[r] {
 			g.grid[r][c] = val
 		}
 	}
@@ -56,7 +84,7 @@ func (g *Grid) Fill(val int) {
 
 func (g *Grid) SetRow(r int, line string) {
 	if len(g.grid[r]) != len(line) {
-		panic("wrong line")
+		panic(fmt.Sprintf("wrong line: %s", line))
 	}
 	for c, val := range line {
 		g.grid[r][c] = int(val)
@@ -70,8 +98,13 @@ func (g *Grid) SetRow(r int, line string) {
 }
 
 func (g *Grid) Inside(r, c int) bool {
-	n := len(g.grid)
-	return r >= 0 && c >= 0 && r < n && c < n
+	m := len(g.grid)
+	n := len(g.grid[0])
+	return r >= 0 && c >= 0 && r < m && c < n
+}
+
+func (g *Grid) InsideCoord(pos Coord) bool {
+	return g.Inside(pos.r, pos.c)
 }
 
 func (g *Grid) GetAt(r, c int) int {
@@ -85,8 +118,12 @@ func (g *Grid) String() string {
 	// return fmt.Sprintf("%v, start:%v", g.grid, *g.start)
 	ret := ""
 	for r := range g.grid {
-		for c := range g.grid[r] {
-			ret += fmt.Sprintf("%4d ", g.grid[r][c])
+		for _, val := range g.grid[r] {
+			if val == 0 {
+				ret += " "
+			} else {
+				ret += fmt.Sprintf("%c", val)
+			}
 		}
 		ret += fmt.Sprintln()
 	}
