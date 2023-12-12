@@ -86,6 +86,6 @@ func main() {
 
 	// day 12
 	lines := common.GetLinesFromFile("resources/12.txt", true, true)
-	part1 := day12.Part1(lines)
-	fmt.Println("part1:", part1)
+	part2 := day12.Part2(lines)
+	fmt.Println("part2:", part2)
 }

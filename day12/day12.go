@@ -12,7 +12,7 @@ const (
 	UNKNOWN     int = int('?')
 )
 
-func Part1(lines []string) int {
+func Part2(lines []string) int {
 	sum := 0
 	for _, line := range lines {
 		// line := lines[5]
@@ -38,10 +38,23 @@ func countArrangements(lineStr string) int {
 	// fmt.Println(line, rangeLengths)
 	// fmt.Println(len(line), compressedLength(rangeLengths))
 
-	return rec(line, rangeLengths)
+	// unfolding for part2
+	line = fmt.Sprintf("%s?%s?%s?%s?%s", line, line, line, line, line)
+	newRangeLengths := make([]int, len(rangeLengths)*5)
+	for i := range newRangeLengths {
+		newRangeLengths[i] = rangeLengths[i%len(rangeLengths)]
+	}
+
+	cache := NewCache()
+	return rec(line, newRangeLengths, cache)
 }
 
-func rec(line string, rangeLengths []int) int {
+func rec(line string, rangeLengths []int, cache *Cache) int {
+	cacheValue, exists := cache.Get(line, rangeLengths)
+	if exists {
+		return cacheValue
+	}
+
 	if len(rangeLengths) == 0 {
 		panic("no ranges")
 	}
@@ -59,7 +72,7 @@ func rec(line string, rangeLengths []int) int {
 				continue
 			}
 			if len(rest) > 0 {
-				count += rec(line[i+this+1:], rest)
+				count += rec(line[i+this+1:], rest, cache)
 			} else {
 				if allNonDamaged(line, i+this, len(line)-1) {
 					count++
@@ -67,6 +80,7 @@ func rec(line string, rangeLengths []int) int {
 			}
 		}
 	}
+	cache.Put(line, rangeLengths, count)
 	return count
 }
 
