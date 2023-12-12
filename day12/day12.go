@@ -72,19 +72,25 @@ func rec(line string, rangeLengths []int, cache *Cache) int {
 	this := rangeLengths[0]
 	rest := rangeLengths[1:]
 	count := 0
+
+	// Push all remaining ranges (rest) to the right, and compute the space
+	// remaining for the current range to move from 0 (start of current line)
+	// until 'lastGoodIndex'.
 	compressedRest := compressedLength(rest)
 	if compressedRest > 0 {
 		compressedRest += 1 // leave a separator
 	}
 	lastGoodIndex := len(line) - compressedRest - this
+	// For each possible start position of the current range ...
 	for i := 0; i <= lastGoodIndex; i++ {
-		if oneRangeFits(line, i, this) {
-			if !allNonDamaged(line, 0, i-1) {
-				continue
-			}
+		// ... check if the range would fit while not contradicting any previous #
+		if oneRangeFits(line, i, this) && allNonDamaged(line, 0, i-1) {
 			if len(rest) > 0 {
+				// This range has a valid position, count the amount of arrangements for
+				// the remaining line after removing the current range, at the current position.
 				count += rec(line[i+this+1:], rest, cache)
 			} else {
+				// count the solution, iff all the remaining positions can be operational (aka non-damaged)
 				if allNonDamaged(line, i+this, len(line)-1) {
 					count++
 				}
