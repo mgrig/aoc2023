@@ -12,18 +12,27 @@ const (
 	UNKNOWN     int = int('?')
 )
 
-func Part2(lines []string) int {
+func Part1(lines []string) int {
 	sum := 0
 	for _, line := range lines {
-		// line := lines[5]
-		count := countArrangements(line)
-		fmt.Println(count, line)
+		count := countArrangements(line, false)
+		// fmt.Println(count, line)
 		sum += count
 	}
 	return sum
 }
 
-func countArrangements(lineStr string) int {
+func Part2(lines []string) int {
+	sum := 0
+	for _, line := range lines {
+		count := countArrangements(line, true)
+		// fmt.Println(count, line)
+		sum += count
+	}
+	return sum
+}
+
+func countArrangements(lineStr string, unfold bool) int {
 	tokens := strings.Split(lineStr, " ")
 	if len(tokens) != 2 {
 		panic("wrong split")
@@ -38,15 +47,17 @@ func countArrangements(lineStr string) int {
 	// fmt.Println(line, rangeLengths)
 	// fmt.Println(len(line), compressedLength(rangeLengths))
 
-	// unfolding for part2
-	line = fmt.Sprintf("%s?%s?%s?%s?%s", line, line, line, line, line)
-	newRangeLengths := make([]int, len(rangeLengths)*5)
-	for i := range newRangeLengths {
-		newRangeLengths[i] = rangeLengths[i%len(rangeLengths)]
+	if unfold {
+		line = fmt.Sprintf("%s?%s?%s?%s?%s", line, line, line, line, line)
+		newRangeLengths := make([]int, len(rangeLengths)*5)
+		for i := range newRangeLengths {
+			newRangeLengths[i] = rangeLengths[i%len(rangeLengths)]
+		}
+		rangeLengths = newRangeLengths
 	}
 
 	cache := NewCache()
-	return rec(line, newRangeLengths, cache)
+	return rec(line, rangeLengths, cache)
 }
 
 func rec(line string, rangeLengths []int, cache *Cache) int {
