@@ -1,10 +1,6 @@
 package day13
 
-import (
-	"aoc2023/common"
-)
-
-func Part1(lines []string) int {
+func Part(lines []string, maxSmudges int) int {
 	grids := make([]*Grid, 0)
 	grid := NewGrid()
 	grids = append(grids, grid)
@@ -19,116 +15,54 @@ func Part1(lines []string) int {
 
 	sum := 0
 	for _, g := range grids {
-		h := hist(g.grid)
-		splitIndex, found := searchReflectionLine(h, len(g.grid))
-		if found {
-			sum += 100 * splitIndex
-		} else {
-			ht := hist(g.Transpose().grid)
-			splitIndex, found = searchReflectionLine(ht, len(g.grid[0]))
-			if !found {
-				panic("nothing found")
-			}
-			sum += splitIndex
-		}
+		sum += summarize(g, maxSmudges)
 	}
 
 	return sum
 }
 
-func histToSparse(h map[string][]int, nrIndexes int) *Sparse {
-	ret := NewSparse(nrIndexes)
-	for _, hval := range h {
-		for _, iVal := range hval {
-			ret.Set(iVal, hval)
+func summarize(g *Grid, maxSmudges int) int {
+	for split := 1; split < len(g.grid); split++ {
+		if isValidSplit(g.grid, split, maxSmudges) {
+			return 100 * split
 		}
 	}
-	return ret
-}
 
-func hist(lines []string) map[string][]int {
-	ret := make(map[string][]int, 0)
-	for i, line := range lines {
-		_, exists := ret[line]
-		if !exists {
-			ret[line] = make([]int, 0)
+	g = g.Transpose()
+	for split := 1; split < len(g.grid); split++ {
+		if isValidSplit(g.grid, split, maxSmudges) {
+			return split
 		}
-		ret[line] = append(ret[line], i)
 	}
-	return ret
+
+	panic("split not found")
 }
 
-func searchReflectionLine(h map[string][]int, nrIndexes int) (index int, found bool) {
-	// one of the 2 ends must belong to the reflected surface. we try both.
-	s := (*histToSparse(h, nrIndexes)).mat
-	canStartLeft := !(len(s[0]) == 1 || len(s[1]) == 1)
-	canStartRight := !(len(s[len(s)-1]) == 1 || len(s[len(s)-2]) == 1)
-	if !canStartLeft && !canStartRight {
-		return -1, false
-	}
-
-	if canStartLeft {
-		splits := possibleSplitIndexes(s[0])
-		for _, split := range splits {
-			to := 2*split - 1
-			if to > len(s)-1 {
-				continue
+func isValidSplit(lines []string, splitIndex int, maxSmudges int) bool {
+	n := len(lines)
+	smudges := 0 // applied smudges
+	for left, right := splitIndex-1, splitIndex; left >= 0 && right <= n-1; left, right = left-1, right+1 {
+		delta := diff(lines[left], lines[right])
+		if smudges+delta <= maxSmudges {
+			if delta == 1 {
+				smudges = 1
 			}
-			if checkSplit(split, 0, to, &s) { //TODO could there be more solutions?!
-				return split, true
-			}
+		} else {
+			return false // too many diffs
 		}
 	}
-
-	// can start right
-	splits := possibleSplitIndexes(s[len(s)-1])
-	for _, split := range splits {
-		lenSplit := len(s) - split
-		from := len(s) - 2*lenSplit
-		if from < 0 {
-			continue
-		}
-		if checkSplit(split, from, len(s)-1, &s) { //TODO could there be more solutions?!
-			return split, true
-		}
-	}
-
-	return -1, false
+	return smudges == maxSmudges
 }
 
-func checkSplit(split int, from, to int, sparse *[][]int) bool {
-	for i := from; i <= to; i++ {
-		if !sliceContains(possibleSplitIndexes((*sparse)[i]), split) {
-			return false
+func diff(line1, line2 string) int {
+	if len(line1) != len(line2) {
+		panic("wrong lines")
+	}
+	sum := 0
+	for i, c1 := range line1 {
+		if byte(c1) != line2[i] {
+			sum++
 		}
 	}
-	return true
-}
-
-func sliceContains(slice []int, value int) bool {
-	for _, s := range slice {
-		if s == value {
-			return true
-		}
-	}
-	return false
-}
-
-func possibleSplitIndexes(histIndexes []int) []int {
-	ret := make([]int, 0)
-	if len(histIndexes) < 2 {
-		return ret
-	}
-
-	for i := 0; i < len(histIndexes)-1; i++ {
-		iVal := histIndexes[i]
-		for j := i + 1; j < len(histIndexes); j++ {
-			jVal := histIndexes[j]
-			if common.IntAbs(iVal-jVal)%2 == 1 {
-				ret = append(ret, (iVal+jVal+1)/2)
-			}
-		}
-	}
-
-	return ret
+	return sum
 }
