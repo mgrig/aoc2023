@@ -1,34 +1,5 @@
 package day14
 
-type CacheLine struct {
-	cache map[string]([]int)
-}
-
-func NewCache() *CacheLine {
-	return &CacheLine{
-		cache: make(map[string][]int, 0),
-	}
-}
-
-func toKey(in []int) string {
-	ret := ""
-	for _, val := range in {
-		ret += string(val)
-	}
-	return ret
-}
-
-func (c *CacheLine) Get(in []int) (out []int, found bool) {
-	out, found = c.cache[toKey(in)]
-	return out, found
-}
-
-func (c *CacheLine) Set(in, out []int) {
-	c.cache[toKey(in)] = out
-}
-
-// ****
-
 type History struct {
 	hist map[string](map[int]int) // grid as string -> (direction -> cycle)
 }

@@ -16,34 +16,30 @@ const (
 	RIGHT int = 3
 )
 
-// func Part1(lines []string) int {
-// 	m := len(lines)
-// 	n := len(lines[0])
-// 	g := NewGrid(m, n)
+func Part1(lines []string) int {
+	m := len(lines)
+	n := len(lines[0])
+	g := NewGrid(m, n)
 
-// 	for r, line := range lines {
-// 		for c, val := range line {
-// 			g.grid[r][c] = int(val)
-// 		}
-// 	}
+	for r, line := range lines {
+		for c, val := range line {
+			g.grid[r][c] = int(val)
+		}
+	}
 
-// 	cache := NewCache()
-// 	cg := NewHistory()
+	rollUp(g, NewHistory(), 0)
 
-// 	g = rollUp(g, cg, cache)
-// 	// fmt.Println(g)
+	sum := 0
+	for r, row := range g.grid {
+		for _, val := range row {
+			if val == ROUND {
+				sum += (m - r)
+			}
+		}
+	}
 
-// 	sum := 0
-// 	for r, row := range g.grid {
-// 		for _, val := range row {
-// 			if val == ROUND {
-// 				sum += (m - r)
-// 			}
-// 		}
-// 	}
-
-// 	return sum
-// }
+	return sum
+}
 
 func Part2(lines []string) int {
 	m := len(lines)
@@ -55,7 +51,6 @@ func Part2(lines []string) int {
 			g.grid[r][c] = int(val)
 		}
 	}
-	// cache := NewCache()
 	h := NewHistory()
 
 	var cycle, prevCycle, rest int
@@ -86,10 +81,9 @@ func Part2(lines []string) int {
 			period := cycle - prevCycle
 			rest = (N - beforeRepeat) % period
 			cycle = N - rest
-			fmt.Println("new cycle:", cycle)
+			// fmt.Println("new cycle:", cycle)
 			break
 		}
-
 	}
 
 	for ; cycle < N; cycle++ {
@@ -242,13 +236,7 @@ func hash(s string) uint32 {
 	return h.Sum32()
 }
 
-// func rollRowLeft(cache *CacheLine, row []int) []int {
 func rollRowLeft(row []int) []int {
-	// cacheValue, found := cache.Get(row)
-	// if found {
-	// 	// fmt.Println("cache hit")
-	// 	return cacheValue
-	// }
 	ret := make([]int, len(row))
 	copy(ret, row)
 	for i := 1; i < len(ret); i++ {
@@ -264,6 +252,5 @@ func rollRowLeft(row []int) []int {
 			}
 		}
 	}
-	// cache.Set(row, ret)
 	return ret
 }
