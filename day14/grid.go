@@ -16,6 +16,19 @@ func NewGrid(m, n int) *Grid {
 	}
 }
 
+func (g *Grid) Clone() (other *Grid) {
+	m := len(g.grid)
+	n := len(g.grid[0])
+	otherGrid := make([][]int, m)
+	for r := range otherGrid {
+		otherGrid[r] = make([]int, n)
+		copy(otherGrid[r], g.grid[r])
+	}
+	return &Grid{
+		grid: otherGrid,
+	}
+}
+
 func (g *Grid) String() string {
 	ret := ""
 	for _, row := range g.grid {
