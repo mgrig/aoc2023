@@ -1,5 +1,7 @@
 package day16
 
+import "aoc2023/common"
+
 const (
 	EMPTY     int = int('.')
 	SLASH     int = int('/')
@@ -14,15 +16,19 @@ const (
 )
 
 func Part1(lines []string) int {
-	n := len(lines)
+	return countEnergized(&lines, *NewRay(0, 0, E)) // ray enters (0, 0), goes towards E
+}
+
+func countEnergized(lines *[]string, ray Ray) int {
+	n := len(*lines)
 	hist := NewGrid(n)
-	toPropagate := []Ray{*NewRay(0, 0, E)} // ray enters (0, 0), goes towards E
+	toPropagate := []Ray{ray}
 
 	for len(toPropagate) > 0 {
 		ray := toPropagate[0]
 		toPropagate = toPropagate[1:]
 
-		propagate(ray, &lines, hist, &toPropagate)
+		propagate(ray, lines, hist, &toPropagate)
 	}
 	// fmt.Println(hist)
 
@@ -36,6 +42,18 @@ func Part1(lines []string) int {
 	}
 
 	return sum
+}
+
+func Part2(lines []string) int {
+	n := len(lines)
+	max := 0
+	for i := 0; i < n; i++ {
+		max = common.IntMax(max, countEnergized(&lines, *NewRay(i, 0, E)))
+		max = common.IntMax(max, countEnergized(&lines, *NewRay(i, n-1, W)))
+		max = common.IntMax(max, countEnergized(&lines, *NewRay(0, i, S)))
+		max = common.IntMax(max, countEnergized(&lines, *NewRay(n-1, i, N)))
+	}
+	return max
 }
 
 var SlashNextDir map[int]int = map[int]int{
