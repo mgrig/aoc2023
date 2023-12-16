@@ -2,7 +2,7 @@ package main
 
 import (
 	"aoc2023/common"
-	"aoc2023/day15"
+	"aoc2023/day16"
 	"fmt"
 )
 
@@ -86,10 +86,10 @@ func main() {
 
 	// // day 12
 	// lines := common.GetLinesFromFile("resources/12.txt", true, true)
-	// part1 := day12.Part1(lines)
-	// fmt.Println("part1:", part1)
-	// // part2 := day12.Part2(lines)
-	// // fmt.Println("part2:", part2)
+	// // part1 := day12.Part1(lines)
+	// // fmt.Println("part1:", part1)
+	// part2 := day12.Part2(lines)
+	// fmt.Println("part2:", part2)
 
 	// // day 13
 	// lines := common.GetLinesFromFile("resources/13.txt", false, true)
@@ -105,10 +105,15 @@ func main() {
 	// part2 := day14.Part2(lines)
 	// fmt.Println("part2:", part2)
 
-	// day 15
-	lines := common.GetLinesFromFile("resources/15_hash.txt", true, true)
-	part1 := day15.Part1(lines[0])
+	// // day 15
+	// lines := common.GetLinesFromFile("resources/15_hash.txt", true, true)
+	// part1 := day15.Part1(lines[0])
+	// fmt.Println("part1:", part1)
+	// part2 := day15.Part2(lines[0])
+	// fmt.Println("part2:", part2)
+
+	// day 16
+	lines := common.GetLinesFromFile("resources/16.txt", true, true)
+	part1 := day16.Part1(lines)
 	fmt.Println("part1:", part1)
-	part2 := day15.Part2(lines[0])
-	fmt.Println("part2:", part2)
 }
