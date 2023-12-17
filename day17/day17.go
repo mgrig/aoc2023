@@ -12,9 +12,10 @@ const (
 	W int = 3
 )
 
-func Part1(lines []string) int {
-	n := len(lines)
-	g := NewGrid(n)
+func Part2(lines []string) int {
+	m := len(lines)
+	n := len(lines[0])
+	g := NewGrid(m, n)
 
 	for r, line := range lines {
 		for c, run := range line {
@@ -23,8 +24,9 @@ func Part1(lines []string) int {
 	}
 	fmt.Println(g)
 
+	// start towards E
 	states := make(map[State]int, 0)
-	startState := NewState(0, 0, E, 3)
+	startState := NewState(0, 0, E, 10)
 	toVisit := []State{startState}
 	visited := make(map[State]bool)
 	states[startState] = g.grid[0][0]
@@ -35,7 +37,24 @@ func Part1(lines []string) int {
 
 	minDist := math.MaxInt
 	for state, dist := range states {
-		if state.r == n-1 && state.c == n-1 && dist < minDist {
+		if state.r == m-1 && state.c == n-1 && dist < minDist {
+			minDist = dist
+		}
+	}
+
+	// start towards S
+	states = make(map[State]int, 0)
+	startState = NewState(0, 0, S, 10)
+	toVisit = []State{startState}
+	visited = make(map[State]bool)
+	states[startState] = g.grid[0][0]
+
+	for len(toVisit) > 0 {
+		dijkstra(g, &states, &toVisit, &visited)
+	}
+
+	for state, dist := range states {
+		if state.r == m-1 && state.c == n-1 && dist < minDist {
 			minDist = dist
 		}
 	}
@@ -46,24 +65,34 @@ func Part1(lines []string) int {
 func dijkstra(g *Grid, states *map[State]int, toVisit *[]State, visited *map[State]bool) {
 	state := getNextToVisit(states, toVisit)
 
+	m := len(g.grid)
+	n := len(g.grid[0])
+	if isEndState(m, n, state) {
+		return
+	}
+
 	// find possible next steps (keys)
 	nextStates := make([]State, 0)
 	if state.maxStepsInDir > 0 {
 		addToNextStates(g, &nextStates, state.NextInDir())
 	}
-	addToNextStates(g, &nextStates, state.NextRight())
-	addToNextStates(g, &nextStates, state.NextLeft())
-
-	n := len(g.grid)
-	if state.r == n-1 && state.c == n-1 {
-		return
+	if state.maxStepsInDir <= 6 {
+		addToNextStates(g, &nextStates, state.NextRight())
+		addToNextStates(g, &nextStates, state.NextLeft())
 	}
 
 	for _, nextState := range nextStates {
+		if isEndState(m, n, nextState) && nextState.maxStepsInDir > 6 {
+			continue
+		}
 		possibleValue(states, nextState, (*states)[state]+g.grid[nextState.r][nextState.c])
 		addToVisit(toVisit, visited, nextState)
 	}
 	(*visited)[state] = true
+}
+
+func isEndState(m, n int, state State) bool {
+	return state.r == m-1 && state.c == n-1
 }
 
 func getNextToVisit(states *map[State]int, toVisit *[]State) (nextState State) {

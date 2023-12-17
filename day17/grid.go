@@ -6,8 +6,8 @@ type Grid struct {
 	grid [][]int
 }
 
-func NewGrid(n int) *Grid {
-	grid := make([][]int, n)
+func NewGrid(m, n int) *Grid {
+	grid := make([][]int, m)
 	for r := range grid {
 		grid[r] = make([]int, n)
 	}
@@ -28,6 +28,7 @@ func (g *Grid) String() string {
 }
 
 func (g *Grid) Inside(r, c int) bool {
-	n := len(g.grid)
-	return r >= 0 && c >= 0 && r < n && c < n
+	m := len(g.grid)
+	n := len(g.grid[0])
+	return r >= 0 && c >= 0 && r < m && c < n
 }

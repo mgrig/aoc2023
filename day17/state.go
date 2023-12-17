@@ -51,13 +51,13 @@ func (s State) NextInDir() State {
 func (s State) NextLeft() State {
 	switch s.dir {
 	case E:
-		return NewState(s.r-1, s.c, N, 2)
+		return NewState(s.r-1, s.c, N, 9)
 	case W:
-		return NewState(s.r+1, s.c, S, 2)
+		return NewState(s.r+1, s.c, S, 9)
 	case S:
-		return NewState(s.r, s.c+1, E, 2)
+		return NewState(s.r, s.c+1, E, 9)
 	case N:
-		return NewState(s.r, s.c-1, W, 2)
+		return NewState(s.r, s.c-1, W, 9)
 	default:
 		panic("wrong dir")
 	}
@@ -66,13 +66,13 @@ func (s State) NextLeft() State {
 func (s State) NextRight() State {
 	switch s.dir {
 	case W:
-		return NewState(s.r-1, s.c, N, 2)
+		return NewState(s.r-1, s.c, N, 9)
 	case E:
-		return NewState(s.r+1, s.c, S, 2)
+		return NewState(s.r+1, s.c, S, 9)
 	case N:
-		return NewState(s.r, s.c+1, E, 2)
+		return NewState(s.r, s.c+1, E, 9)
 	case S:
-		return NewState(s.r, s.c-1, W, 2)
+		return NewState(s.r, s.c-1, W, 9)
 	default:
 		panic("wrong dir")
 	}
