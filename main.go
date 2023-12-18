@@ -130,4 +130,5 @@ func main() {
 	lines := common.GetLinesFromFile("resources/18_test.txt", true, true)
 	part1 := day18.Part1(lines)
 	fmt.Println("part1:", part1)
+	// Part 2 in Matlab (which solves both parts a lot faster)
 }
