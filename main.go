@@ -136,4 +136,6 @@ func main() {
 	lines := common.GetLinesFromFile("resources/19.txt", true, true)
 	part1 := day19.Part1(lines)
 	fmt.Println("part 1:", part1)
+	part2 := day19.Part2(lines)
+	fmt.Println("part 2:", part2)
 }
