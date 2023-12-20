@@ -1,0 +1,162 @@
+digraph G {
+    broadcaster [style=filled,color=green]
+    rx [style=filled,color=red]
+    
+  ls [shape=rectangle]
+    ls -> gl
+  rz [shape=rectangle]
+    rz -> vm
+    rz -> gl
+    broadcaster -> rz
+    broadcaster -> fp
+    broadcaster -> kv
+    broadcaster -> fd
+  ql [shape=rectangle]
+    ql -> bn
+  bm [shape=rectangle]
+    bm -> hr
+    bm -> fj
+  fp [shape=rectangle]
+    fp -> cc
+    fp -> gk
+    lk -> nc
+  xg [shape=rectangle]
+    xg -> gl
+    xg -> mz
+  dg [shape=rectangle]
+    dg -> gk
+    dg -> mp
+  zg [shape=rectangle]
+    zg -> ls
+    zg -> gl
+  lg [shape=rectangle]
+    lg -> hr
+  pt [shape=rectangle]
+    pt -> lg
+    pt -> hr
+  sp [shape=rectangle]
+    sp -> mj
+  ms [shape=rectangle]
+    ms -> gl
+    ms -> hx
+  kj [shape=rectangle]
+    kj -> fl
+    kj -> gk
+  bn [shape=rectangle]
+    bn -> rj
+    bn -> gk
+  xc [shape=rectangle]
+    xc -> vq
+  fl [shape=rectangle]
+    fl -> gk
+  dh [shape=rectangle]
+    dh -> hr
+    dh -> nm
+  jk [shape=rectangle]
+    jk -> gk
+    jk -> dg
+  tf [shape=rectangle]
+    tf -> cb
+  kd [shape=rectangle]
+    kd -> cm
+    kd -> nr
+    hr -> hh
+    hr -> kv
+    hr -> xl
+    hr -> qq
+  kv [shape=rectangle]
+    kv -> xr
+    kv -> hr
+  hq [shape=rectangle]
+    hq -> ql
+    fn -> nc
+  vm [shape=rectangle]
+    vm -> gl
+    vm -> xn
+  jh [shape=rectangle]
+    jh -> nr
+    jh -> kd
+  mz [shape=rectangle]
+    mz -> dd
+  tp [shape=rectangle]
+    tp -> hq
+  cf [shape=rectangle]
+    cf -> nr
+  gr [shape=rectangle]
+    gr -> jh
+  jd [shape=rectangle]
+    jd -> hr
+    jd -> bm
+  xr [shape=rectangle]
+    xr -> qq
+    xr -> hr
+  cm [shape=rectangle]
+    cm -> nr
+    cm -> cf
+    fh -> nc
+  rb [shape=rectangle]
+    rb -> xl
+    rb -> hr
+    nc -> rx
+  mp [shape=rectangle]
+    mp -> gk
+    mp -> kj
+    nr -> fd
+    nr -> gr
+    nr -> fn
+    nr -> cb
+    nr -> tf
+    nr -> xc
+    nr -> vq
+    gl -> fh
+    gl -> xn
+    gl -> sp
+    gl -> mz
+    gl -> rz
+    gl -> mj
+    gl -> dd
+  rj [shape=rectangle]
+    rj -> jk
+    hh -> nc
+  fd [shape=rectangle]
+    fd -> nr
+    fd -> df
+    gk -> lk
+    gk -> tp
+    gk -> fp
+    gk -> ql
+    gk -> hq
+    gk -> rj
+  fj [shape=rectangle]
+    fj -> pt
+    fj -> hr
+  qq [shape=rectangle]
+    qq -> dh
+  df [shape=rectangle]
+    df -> nr
+    df -> nv
+  mj [shape=rectangle]
+    mj -> ms
+  xn [shape=rectangle]
+    xn -> xg
+  cc [shape=rectangle]
+    cc -> gk
+    cc -> tp
+  nm [shape=rectangle]
+    nm -> rb
+    nm -> hr
+  dd [shape=rectangle]
+    dd -> sp
+  vq [shape=rectangle]
+    vq -> gr
+  cb [shape=rectangle]
+    cb -> xc
+  nv [shape=rectangle]
+    nv -> tf
+    nv -> nr
+  xl [shape=rectangle]
+    xl -> jd
+  hx [shape=rectangle]
+    hx -> gl
+    hx -> zg
+}

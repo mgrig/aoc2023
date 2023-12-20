@@ -140,7 +140,9 @@ func main() {
 	// fmt.Println("part 2:", part2)
 
 	// day 20
-	lines := common.GetLinesFromFile("resources/20.txt", true, true)
-	part1 := day20.Part1(lines)
-	fmt.Println("part 1:", part1)
+	lines := common.GetLinesFromFile("resources/20_cluster_fd_fn.txt", true, true)
+	// part1 := day20.Part1(lines)
+	// fmt.Println("part 1:", part1)
+	part2 := day20.Part2(lines)
+	fmt.Println("part 2:", part2)
 }
