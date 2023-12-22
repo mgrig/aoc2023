@@ -21,3 +21,23 @@ func (n *Node) Supports(other int) {
 func (n *Node) SupportedBy(other int) {
 	n.supportedBy[other] = true
 }
+
+func (n *Node) NextNodes() []int {
+	ret := make([]int, len(n.supports))
+	i := 0
+	for next := range n.supports {
+		ret[i] = next
+		i++
+	}
+	return ret
+}
+
+func (n *Node) PrevNodes() []int {
+	ret := make([]int, len(n.supportedBy))
+	i := 0
+	for next := range n.supportedBy {
+		ret[i] = next
+		i++
+	}
+	return ret
+}

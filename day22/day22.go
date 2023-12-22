@@ -97,16 +97,55 @@ func Part1(lines []string) int {
 		}
 	}
 
-	// count nodes for which all next (Supports) have more than 1 SupportedBy
+	// Part 1
+	// // count nodes for which all next (Supports) have more than 1 SupportedBy
+	// count := 0
+	// for i := range nodes {
+	// 	if AllNextHaveMorePrev(&nodes, i) {
+	// 		// fmt.Println("can remove brick", i)
+	// 		count++
+	// 	}
+	// }
+
+	// Part 2
 	count := 0
 	for i := range nodes {
-		if AllNextHaveMorePrev(&nodes, i) {
-			// fmt.Println("can remove brick", i)
-			count++
-		}
+		count += countFallenIfRemoving(&nodes, i)
 	}
 
 	return count
+}
+
+func countFallenIfRemoving(nodes *[]Node, index int) int {
+	fallen := map[int]bool{index: true}
+	toVisit := (*nodes)[index].NextNodes()
+	for len(toVisit) > 0 {
+		index = toVisit[0]
+		toVisit = toVisit[1:]
+
+		if fallen[index] {
+			continue
+		}
+
+		prevNodes := (*nodes)[index].PrevNodes()
+		if AllPrevsHaveFallen(&fallen, prevNodes) {
+			nextNodes := (*nodes)[index].NextNodes()
+			toVisit = append(toVisit, nextNodes...)
+			fallen[index] = true
+		}
+
+	}
+
+	return len(fallen) - 1 // ignore initial index
+}
+
+func AllPrevsHaveFallen(fallen *map[int]bool, prevs []int) bool {
+	for _, prev := range prevs {
+		if !(*fallen)[prev] {
+			return false
+		}
+	}
+	return true
 }
 
 func AllNextHaveMorePrev(nodes *[]Node, index int) bool {
