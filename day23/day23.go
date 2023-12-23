@@ -2,6 +2,7 @@ package day23
 
 import (
 	"aoc2023/common"
+	"fmt"
 )
 
 func Part1(lines []string) int {
@@ -134,7 +135,51 @@ func Part1(lines []string) int {
 		toVisit = append(toVisit, node.next...)
 	}
 
-	return dist[endNodeId] - 1
+	// result for part 1: dist[endNodeId] - 1
+
+	g := NewGraph()
+	// transform graph to a new, undirected one, for part 2
+	for _, node := range *nodes {
+		// fmt.Printf("  %d\n", node.id)
+		for _, nextId := range node.next {
+			next := (*nodes)[nextId]
+			// fmt.Printf("    %d -- %d [label=%d]\n", node.id, nextId, 1+next.size)
+			g.AddEdge(node.id, nextId, 1+next.size)
+		}
+	}
+	g.AddEdge(0, 1, g.GetWeight(0, 1)+dist[startNodeId]-1)
+
+	// fmt.Println(g.PrintAsDot())
+	g.Simplify()
+	// fmt.Println("simplified:")
+	fmt.Println(g.PrintAsDot())
+
+	// search all paths from start to end, without revisit
+	visited := make(map[int]bool, 0)
+	maxLen := 0
+	rec(g, visited, startNodeId, 0, endNodeId, &maxLen)
+
+	return maxLen
+}
+
+func rec(g *Graph, visited map[int]bool, currentNodeId, currentLen, endNodeId int, maxLen *int) {
+	if currentNodeId == endNodeId {
+		*maxLen = common.IntMax(*maxLen, currentLen)
+	}
+
+	currentNode := g.GetOrCreateUNode(currentNodeId)
+
+	visitedClone := make(map[int]bool, len(visited))
+	for k, v := range visited {
+		visitedClone[k] = v
+	}
+	visitedClone[currentNodeId] = true
+
+	for nei, w := range currentNode.neis {
+		if _, exists := visited[nei]; !exists {
+			rec(g, visitedClone, nei, currentLen+w, endNodeId, maxLen)
+		}
+	}
 }
 
 func findFirstEmpty(line string) (index int) {
