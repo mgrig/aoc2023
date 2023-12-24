@@ -1,15 +1,17 @@
 package day24
 
 type Line struct {
-	x, y   int
-	dx, dy int
-	x2, y2 int
+	start Coord
+	dir   Coord
 }
 
-func NewLine(x, y, dx, dy int) Line {
+func NewLine(x, y, z, dx, dy, dz int) Line {
 	return Line{
-		x: x, y: y,
-		dx: dx, dy: dy,
-		x2: x + dx, y2: y + dy,
+		start: NewCoord(x, y, z),
+		dir:   NewCoord(dx, dy, dz),
 	}
+}
+
+func (l Line) PositionAt(time int) Coord {
+	return NewCoord(l.start.x+time*l.dir.x, l.start.y+time*l.dir.y, l.start.z+time*l.dir.z)
 }
