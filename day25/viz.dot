@@ -277,7 +277,7 @@ graph G {
   mtl -- qcg
   mtl -- lzm
   cth -- dkq
-  // cth -- xxk
+  cth -- xxk //
   cth -- dfs
   qhd -- fgx
   qhd -- hpn
@@ -957,7 +957,7 @@ graph G {
   csq -- mbs
   vhc -- dtr
   vhc -- ggx
-  // zdj -- nvt
+  zdj -- nvt //
   zdj -- ffr
   zdj -- sxq
   zdj -- ftx
@@ -2237,7 +2237,7 @@ graph G {
   ktk -- xhm
   mzg -- xln
   mzg -- smx
-  mzg -- bbm
+  mzg -- bbm //
   vdh -- kzx
   vdh -- vqs
   vdh -- jjm
